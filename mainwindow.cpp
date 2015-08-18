@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+#include <QSqlTableModel>
 #include <QSqlDatabase>
 #include <QSqlError>
 #include <QSqlQuery>
@@ -19,6 +20,29 @@ MainWindow::MainWindow(QWidget *parent) :
     QFile::remove(fName);
     db.init(fName);
     db.createTables();
+
+    verbsmodel= new QSqlTableModel(this,db.getDb());
+    verbsmodel->setTable("verbs_es");
+    verbsmodel->setEditStrategy(QSqlTableModel::OnManualSubmit);
+    verbsmodel->select();//Это ещё зачем?
+
+    ui->tableViewVerbs->setModel(verbsmodel);
+    ui->tableViewVerbs->hideColumn(0);
+
+    /*
+    QSqlTableModel *model = new QSqlTableModel(parentObject, database);
+         model->setTable("employee");
+         model->setEditStrategy(QSqlTableModel::OnManualSubmit);
+         model->select();
+         model->setHeaderData(0, Qt::Horizontal, tr("Name"));
+         model->setHeaderData(1, Qt::Horizontal, tr("Salary"));
+
+         QTableView *view = new QTableView;
+         view->setModel(model);
+         view->hideColumn(0); // don't show the ID
+         view->show();
+         */
+
 }
 
 MainWindow::~MainWindow()

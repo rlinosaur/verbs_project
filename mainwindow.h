@@ -1,6 +1,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include <QSqlTableModel>
 #include <QMainWindow>
 
 #include "verbs_database.h"
@@ -23,6 +24,7 @@ private slots:
 private:   
     Ui::MainWindow *ui;
     VerbsDatabase db;
+    QSqlTableModel *verbsmodel;
 };
 
 #endif // MAINWINDOW_H

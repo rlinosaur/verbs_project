@@ -16,6 +16,7 @@ public:
     bool close();
     bool deleteDatabase();
     bool createTables();
+    QSqlDatabase getDb(){return db;}
 private:
     QSqlDatabase db;
     QString fName;
