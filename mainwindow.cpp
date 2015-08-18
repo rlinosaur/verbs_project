@@ -13,8 +13,12 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
-    connect(&db,SIGNAL(sendMessage(QString)),this,SLOT(messView(QString));
+    connect(&db,SIGNAL(sendMessage(QString)),this,SLOT(messView(QString)));
     ui->setupUi(this);
+    QString fName("verbsbase.db");
+    QFile::remove(fName);
+    db.init(fName);
+    db.createTables();
 }
 
 MainWindow::~MainWindow()
@@ -29,9 +33,7 @@ void MainWindow::on_pushButton_clicked()
     //create tables
     //watch the result.
 
-    QString fName("verbsbase.db");
-    QFile::remove(fName);
-    db.init(fName);
+
     //собственно
 }
 

@@ -14,6 +14,8 @@ public:
     void init(QString fileName="verbsbase.db");
     bool isOpen();
     bool close();
+    bool deleteDatabase();
+    bool createTables();
 private:
     QSqlDatabase db;
     QString fName;
