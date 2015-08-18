@@ -14,9 +14,12 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    verbs_database.cpp
+    verbs_database.cpp \
+    verbeditor.cpp
 
 HEADERS  += mainwindow.h \
-    verbs_database.h
+    verbs_database.h \
+    verbeditor.h
 
-FORMS    += mainwindow.ui
+FORMS    += mainwindow.ui \
+    verbeditor.ui

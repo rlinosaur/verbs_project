@@ -10,9 +10,11 @@
 
 #include <QDebug>
 
+#include "verbeditor.h"
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MainWindow)
+    ui(new Ui::MainWindow)  
 {
     connect(&db,SIGNAL(sendMessage(QString)),this,SLOT(messView(QString)));
     ui->setupUi(this);
@@ -65,4 +67,10 @@ void MainWindow::on_pushButton_clicked()
 void MainWindow::messView(QString message)
 {
     ui->textBrowser->append(message);
+}
+
+void MainWindow::on_pushButton_2_clicked()
+{
+    VerbEditor ve(this,&db);
+    ve.exec();
 }

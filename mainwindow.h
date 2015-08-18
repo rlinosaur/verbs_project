@@ -21,7 +21,9 @@ public:
 private slots:
     void on_pushButton_clicked();
     void messView(QString message);
-private:   
+    void on_pushButton_2_clicked();
+
+private:
     Ui::MainWindow *ui;
     VerbsDatabase db;
     QSqlTableModel *verbsmodel;
