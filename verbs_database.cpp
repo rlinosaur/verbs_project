@@ -60,7 +60,9 @@ void VerbsDatabase::mess(QString message)
 bool VerbsDatabase::createTables()
 {
     if(!this->isOpen())return false;
-    QSqlQuery q;
+    QSqlQuery q(db);
+
+    mess("Creating tables...");
     q.prepare("create table if not exists verbforms_es (id varchar(32) primary key not null,verb_id varchar(32),form text,searchform text,regularity integer,plurality integer,gender integer,pronoun integer,tense integer);");
     q.exec();
 
@@ -75,9 +77,10 @@ bool VerbsDatabase::createTables()
 
     q.prepare("create table if not exists verbs_ru (id varchar(32) primary key not null, verb text);");
     q.exec();
-
+    //connections between verbs of different languages.
     q.prepare("create table if not exists verb_es_connections (id varchar(32) primary key not null,verb_es_id varchar(32), verb_conn_id varchar(32));");
     q.exec();
+
     //Нужен ли перевод каждой словоформе? Я думаю, что нет. Тем более, что на английском это почти всегда одно слово.
     //пожалуй вопрос скорее в том, как и когда. И зачем.
 
