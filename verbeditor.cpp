@@ -50,6 +50,9 @@ VerbEditor::VerbEditor(QString verbId, VerbsDatabase *database, QWidget *parent)
     }
     this->setWindowTitle("Edit verb '"+verbVerb+"'");
 
+    //Заполнить список.
+    //enum for cicle..how to? Just I don't know.
+
 }
 
 VerbEditor::~VerbEditor()

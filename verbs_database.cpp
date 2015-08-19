@@ -253,6 +253,7 @@ bool VerbsDatabase::cleanDatabase()
     if(!this->isOpen())return false;
     QSqlQuery q(db);
     q.exec("delete from verbforms_es where verb_id not in (select id from verbs_es);");
-
+//áéíñóúü
+//áéíñóúüÁÉÍÑÓÚÜ
     return true;
 }
