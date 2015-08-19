@@ -37,7 +37,7 @@ void VerbsDatabase::init(QString fileName)
     mess("Database initialization...");
     mess("Available drivers list:"+drivers.join(","));
 
-    db = QSqlDatabase::addDatabase("QSQLITE", QUuid::createUuid());
+    db = QSqlDatabase::addDatabase("QSQLITE", QUuid::createUuid().toRfc4122().toHex());
     db.setDatabaseName(fileName);
     db.setHostName("localhost");
 
