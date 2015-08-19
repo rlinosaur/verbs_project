@@ -54,7 +54,7 @@ bool VerbsDatabase::close()
 void VerbsDatabase::mess(QString message)
 {
     qDebug()<<message;
-    Q_EMIT sendMessage(message);
+    Q_EMIT sendMessage(message,messageText);
 }
 
 bool VerbsDatabase::createTables()
@@ -88,4 +88,86 @@ bool VerbsDatabase::createTables()
     //Я бы сказал, что ого-го!
 
     return true;
+}
+
+QString VerbsDatabase::addVerb(QString verb, languageEnum lang)
+{
+    if(!this->isOpen())return QString();
+    QString verbId;
+    QSqlQuery q(db);
+    QString verbTable;
+    switch(lang)
+    {
+    case languageEnglish:
+        verbTable="verbs_en";
+        break;
+    case languageEspanol:
+        verbTable="verbs_es";
+        break;
+    case languageRussian:
+        verbTable="verbs_ru";
+        break;
+    default:
+        verbTable="verbs_es";
+        break;
+    }
+
+    //проверяем наличие, сначала.
+    q.prepare("select id from "+verbTable+" where verb=:verb limit 1;");
+    q.bindValue(":verb",verb);
+    q.exec();
+    if(q.first())
+    {
+        Q_EMIT sendMessage("Verb '"+verb+"' already exists",messageBox);
+        return verbId;
+    }
+
+    verbId=QUuid::createUuid().toRfc4122().toHex();
+    q.prepare("insert into "+verbTable+" (id,verb) values(:id,:verb);");
+    q.bindValue(":id",verbId);
+    q.bindValue(":verb",verb);
+    if(!q.exec())
+    {
+        verbId.clear();
+        Q_EMIT sendMessage("Last error"+db.lastError().databaseText()+",driver:"+db.lastError().driverText(),messageBox);
+    }
+    return verbId;
+}
+
+bool VerbsDatabase::deleteVerb(QString verbId,languageEnum lang)
+{
+    if(!this->isOpen())return false;
+    QSqlQuery q(db);
+    QString verbTable;
+    switch(lang)
+    {
+    case languageEnglish:
+        verbTable="verbs_en";
+        break;
+    case languageEspanol:
+        verbTable="verbs_es";
+        break;
+    case languageRussian:
+        verbTable="verbs_ru";
+        break;
+    default:
+        verbTable="verbs_es";
+        break;
+    }
+    q.prepare("delete from "+verbTable+" where id=:id;");
+    q.bindValue(":id",verbId);
+    bool res=q.exec();
+    return res;
+}
+
+bool VerbsDatabase::addVerbEsConnection(QString verbEsId, QString verbConnId)
+{
+    if(!this->isOpen())return false;
+
+    QSqlQuery q(db);
+    q.prepare("insert into verb_es_connections (id, verb_es_id,verb_conn_id) values (:id,:verb_es_id,:verb_conn_id);");
+    q.bindValue(":id",QUuid::createUuid().toRfc4122().toHex());
+    q.bindValue(":verb_es_id",verbEsId);
+    q.bindValue(":verb_conn_id",verbConnId);
+    return q.exec();
 }

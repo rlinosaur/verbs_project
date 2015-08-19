@@ -11,16 +11,35 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Verb editor</string>
   </property>
   <widget class="QTableView" name="tableView">
    <property name="geometry">
     <rect>
-     <x>60</x>
-     <y>50</y>
+     <x>20</x>
+     <y>160</y>
      <width>256</width>
      <height>192</height>
     </rect>
+   </property>
+  </widget>
+  <widget class="QLabel" name="labelVerb">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>10</y>
+     <width>441</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="text">
+    <string/>
    </property>
   </widget>
  </widget>

@@ -15,11 +15,16 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp \
     verbs_database.cpp \
-    verbeditor.cpp
+    verbeditor.cpp \
+    defines.cpp
 
 HEADERS  += mainwindow.h \
     verbs_database.h \
-    verbeditor.h
+    verbeditor.h \
+    defines.h
 
 FORMS    += mainwindow.ui \
     verbeditor.ui
+
+OTHER_FILES += \
+    todo.txt

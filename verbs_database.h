@@ -5,6 +5,10 @@
 #include <QString>
 #include <QObject>
 
+#include "defines.h"
+
+
+
 
 class VerbsDatabase : public QObject
 {
@@ -17,6 +21,10 @@ public:
     bool deleteDatabase();
     bool createTables();
     QSqlDatabase getDb(){return db;}
+
+    QString addVerb(QString verb,languageEnum lang);
+    bool deleteVerb(QString verbId, languageEnum lang);
+    bool addVerbEsConnection(QString verbEsId, QString verbConnId);
 private:
     QSqlDatabase db;
     QString fName;
@@ -24,7 +32,7 @@ private:
 
     
 signals:
-    void sendMessage(QString message);
+    void sendMessage(QString message, MessageType messtype);
 public slots:
     
 };

@@ -16,13 +16,15 @@ class VerbEditor : public QDialog
     Q_OBJECT
     
 public:
-    explicit VerbEditor(QWidget *parent = 0,VerbsDatabase *db= new VerbsDatabase());
+    explicit VerbEditor(QString verbId,VerbsDatabase *db,QWidget *parent = 0);
     ~VerbEditor();
     
 private:
     Ui::VerbEditor *ui;
+    QSqlTableModel *verbsmodel;
+    QString verbIdent;
+    QString verbVerb;
 
-     QSqlTableModel *verbsmodel;
 };
 
 #endif // VERBEDITOR_H
