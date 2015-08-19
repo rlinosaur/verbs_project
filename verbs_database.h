@@ -25,6 +25,8 @@ public:
     QString addVerb(QString verb,languageEnum lang);
     bool deleteVerb(QString verbId, languageEnum lang);
     bool addVerbEsConnection(QString verbEsId, QString verbConnId);
+    bool cleanDatabase();
+    bool changeVerb(QString verbId, QString newName, languageEnum lang);
 private:
     QSqlDatabase db;
     QString fName;

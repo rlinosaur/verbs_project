@@ -7,18 +7,29 @@
 
 #include "verbs_database.h"
 
-
+/**
+ * @brief VerbsDatabase::VerbsDatabase Unexpectable, but it's the class constructor
+ * @param parent
+ */
 VerbsDatabase::VerbsDatabase(QObject *parent) :
     QObject(parent)
 {
 
 }
+/**
+ * @brief VerbsDatabase::deleteDatabase Deleting database
+ * @return
+ */
 bool VerbsDatabase::deleteDatabase()
 {
     if(this->isOpen())this->close();    
     return QFile::remove(fName);
 }
 
+/**
+ * @brief VerbsDatabase::init Database opening
+ * @param fileName
+ */
 void VerbsDatabase::init(QString fileName)
 {
 
@@ -40,23 +51,36 @@ void VerbsDatabase::init(QString fileName)
     }
 }
 
+/**
+ * @brief VerbsDatabase::isOpen Check database is open
+ * @return
+ */
 bool VerbsDatabase::isOpen()
 {
     return db.isOpen();
 }
-
+/**
+ * @brief VerbsDatabase::close Close database
+ * @return
+ */
 bool VerbsDatabase::close()
 {
     db.close();
     return true;
 }
-
+/**
+ * @brief VerbsDatabase::mess Way to send message anywhere
+ * @param message Message
+ */
 void VerbsDatabase::mess(QString message)
 {
     qDebug()<<message;
     Q_EMIT sendMessage(message,messageText);
 }
-
+/**
+ * @brief VerbsDatabase::createTables Creates all the tables
+ * @return
+ */
 bool VerbsDatabase::createTables()
 {
     if(!this->isOpen())return false;
@@ -89,7 +113,12 @@ bool VerbsDatabase::createTables()
 
     return true;
 }
-
+/**
+ * @brief VerbsDatabase::addVerb Add new verb
+ * @param verb Verb
+ * @param lang Language for table selection
+ * @return
+ */
 QString VerbsDatabase::addVerb(QString verb, languageEnum lang)
 {
     if(!this->isOpen())return QString();
@@ -133,8 +162,47 @@ QString VerbsDatabase::addVerb(QString verb, languageEnum lang)
     }
     return verbId;
 }
-
+/**
+ * @brief VerbsDatabase::deleteVerb Delete verb
+ * @param verbId Verb identificator
+ * @param lang Language for table selection
+ * @return
+ */
 bool VerbsDatabase::deleteVerb(QString verbId,languageEnum lang)
+{
+    if(!this->isOpen())return false;
+    QSqlQuery q(db);
+    QString verbLangPrefix;
+    switch(lang)
+    {
+    case languageEnglish:
+        verbLangPrefix="en";
+        break;
+    case languageEspanol:
+        verbLangPrefix="es";
+        break;
+    case languageRussian:
+        verbLangPrefix="ru";
+        break;
+    default:
+        verbLangPrefix="es";
+        break;
+    }
+    q.prepare("delete from verbs_"+verbLangPrefix+" where id=:id;");
+    q.bindValue(":id",verbId);
+    bool res=q.exec();
+    //Короче, надо делать триггеры и забыть об этом...слишком много всего надо тут упомянуть.
+    //ТРИГГЕРЫ
+    return res;
+}
+/**
+ * @brief VerbsDatabase::changeVerb Change verb
+ * @param verbId Verb identificator
+ * @param newName New Verb text
+ * @param lang Language for table selection
+ * @return
+ */
+bool VerbsDatabase::changeVerb(QString verbId,QString newName,languageEnum lang)
 {
     if(!this->isOpen())return false;
     QSqlQuery q(db);
@@ -154,12 +222,17 @@ bool VerbsDatabase::deleteVerb(QString verbId,languageEnum lang)
         verbTable="verbs_es";
         break;
     }
-    q.prepare("delete from "+verbTable+" where id=:id;");
+    q.prepare("update "+verbTable+" set verb=:verb where id=:id;");
+    q.bindValue(":verb",newName);
     q.bindValue(":id",verbId);
-    bool res=q.exec();
-    return res;
+    return q.exec();
 }
-
+/**
+ * @brief VerbsDatabase::addVerbEsConnection Add connection for Spanish verb to another language verb
+ * @param verbEsId Spanish verb identificator
+ * @param verbConnId Another language verb idetificator
+ * @return
+ */
 bool VerbsDatabase::addVerbEsConnection(QString verbEsId, QString verbConnId)
 {
     if(!this->isOpen())return false;
@@ -170,4 +243,16 @@ bool VerbsDatabase::addVerbEsConnection(QString verbEsId, QString verbConnId)
     q.bindValue(":verb_es_id",verbEsId);
     q.bindValue(":verb_conn_id",verbConnId);
     return q.exec();
+}
+/**
+ * @brief VerbsDatabase::cleanDatabase Clean possible trash
+ * @return
+ */
+bool VerbsDatabase::cleanDatabase()
+{
+    if(!this->isOpen())return false;
+    QSqlQuery q(db);
+    q.exec("delete from verbforms_es where verb_id not in (select id from verbs_es);");
+
+    return true;
 }
