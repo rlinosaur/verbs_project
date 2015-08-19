@@ -1,17 +1,18 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-#include <QMessageBox>
 #include <QSqlTableModel>
 #include <QSqlDatabase>
+#include <QMessageBox>
+#include <QMimeData>
 #include <QSqlError>
 #include <QSqlQuery>
+#include <QDebug>
 #include <QFile>
 
-
-#include <QDebug>
-
+#include "settingsdialog.h"
 #include "verbeditor.h"
+
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -45,19 +46,20 @@ MainWindow::MainWindow(QWidget *parent) :
 
     //ui->tableViewVerbs->setSelectionModel(QItemSelectionModel::Rows);
 
-    /*
-    QSqlTableModel *model = new QSqlTableModel(parentObject, database);
-         model->setTable("employee");
-         model->setEditStrategy(QSqlTableModel::OnManualSubmit);
-         model->select();
-         model->setHeaderData(0, Qt::Horizontal, tr("Name"));
-         model->setHeaderData(1, Qt::Horizontal, tr("Salary"));
+    clipBoard = QApplication::clipboard();
+    clipBoardConnection=connect(clipBoard,SIGNAL(changed(QClipboard::Mode)),this, SLOT(clipBoardEventSlot(QClipboard::Mode)));
 
-         QTableView *view = new QTableView;
-         view->setModel(model);
-         view->hideColumn(0); // don't show the ID
-         view->show();
-         */
+
+}
+
+void MainWindow::clipBoardEventSlot(QClipboard::Mode)
+{
+    //if(QApplication::clipboard()->mimeData()->mimeData()->hasText())
+
+    if(QApplication::clipboard()->mimeData()->hasText() && clipBoard->text().size()<1024)
+           messView("Clipboards text detected:"+clipBoard->text());
+
+
 
 }
 
@@ -172,4 +174,10 @@ void MainWindow::on_tableViewVerbs_pressed(const QModelIndex &index)
            messView("What the..."+db.getDb().lastError().text());
     }
     reloadVerbsTable();
+}
+
+void MainWindow::on_toolButton_clicked()
+{
+    SettingsDialog settings;
+    settings.exec();
 }

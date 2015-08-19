@@ -16,15 +16,21 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     verbs_database.cpp \
     verbeditor.cpp \
-    defines.cpp
+    defines.cpp \
+    settingsdialog.cpp
 
 HEADERS  += mainwindow.h \
     verbs_database.h \
     verbeditor.h \
-    defines.h
+    defines.h \
+    settingsdialog.h
 
 FORMS    += mainwindow.ui \
-    verbeditor.ui
+    verbeditor.ui \
+    settingsdialog.ui
 
 OTHER_FILES += \
     todo.txt
+
+RESOURCES += \
+    resources.qrc

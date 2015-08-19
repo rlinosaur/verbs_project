@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/icons">
+        <file>images/ic_settings_black_48dp.png</file>
+    </qresource>
+</RCC>
