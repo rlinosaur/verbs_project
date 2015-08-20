@@ -47,8 +47,12 @@ QString getTenseNameEn(SpanishTense tense)
         return "Subjunctive Present Perfect";
     case subjImperfect:
         return "Subjunctive Imperfect";
+    case subjImperfect2:
+        return "Subjunctive Imperfect 2th";
     case subjPlurperfect:
         return "Subjunctive Plurperfect";
+    case subjPlurperfect2:
+        return "Subjunctive Plurperfect 2th";
     case subjFuture:
         return "Subjunctive Future";
     case subjFuturePerfect:
@@ -95,7 +99,11 @@ QString getTenseNameRu(SpanishTense tense)
         return "";
     case subjImperfect:
         return "";
+    case subjImperfect2:
+        return "";
     case subjPlurperfect:
+        return "";
+    case subjPlurperfect2:
         return "";
     case subjFuture:
         return "";
@@ -140,7 +148,11 @@ QString getTenseNameEs(SpanishTense tense)
         return "";
     case subjImperfect:
         return "";
+    case subjImperfect2:
+        return "";
     case subjPlurperfect:
+        return "";
+    case subjPlurperfect2:
         return "";
     case subjFuture:
         return "";

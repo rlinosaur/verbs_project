@@ -1,8 +1,9 @@
 #ifndef VERBEDITOR_H
 #define VERBEDITOR_H
 
-#include <QSqlDatabase>
 #include <QSqlTableModel>
+#include <QSqlDatabase>
+#include <QLineEdit>
 #include <QDialog>
 
 #include "verbs_database.h"
@@ -24,12 +25,20 @@ private slots:
 
     void on_pushButtonVerbDelete_clicked();
 
+    void on_pushButtonCaps_clicked();
+
+    void letterClickedSlot();
+    void lineEditInFocusSlot();
+
 private:
     Ui::VerbEditor *ui;
     QSqlTableModel *verbsmodel;
     QString verbIdent;
     QString verbVerb;
     VerbsDatabase *db;
+
+    bool capitalLettersFlag;
+    QLineEdit *lineEditInFocus;
 
 };
 

@@ -53,6 +53,31 @@ VerbEditor::VerbEditor(QString verbId, VerbsDatabase *database, QWidget *parent)
     //Заполнить список.
     //enum for cicle..how to? Just I don't know.
 
+
+    capitalLettersFlag=false;
+
+    ui->lineEditVerb->setFocus();
+    lineEditInFocus=ui->lineEditVerb;
+
+    connect(ui->pushButtonA,SIGNAL(clicked()),this,SLOT(letterClickedSlot()));
+    connect(ui->pushButtonE,SIGNAL(clicked()),this,SLOT(letterClickedSlot()));
+    connect(ui->pushButtonI,SIGNAL(clicked()),this,SLOT(letterClickedSlot()));
+    connect(ui->pushButtonN,SIGNAL(clicked()),this,SLOT(letterClickedSlot()));
+    connect(ui->pushButtonO,SIGNAL(clicked()),this,SLOT(letterClickedSlot()));
+    connect(ui->pushButtonU1,SIGNAL(clicked()),this,SLOT(letterClickedSlot()));
+    connect(ui->pushButtonU2,SIGNAL(clicked()),this,SLOT(letterClickedSlot()));
+
+    connect(ui->lineEditConnectionSearch,SIGNAL(inFocus()),this,SLOT(lineEditInFocusSlot()));
+    connect(ui->lineEditEl,SIGNAL(inFocus()),this,SLOT(lineEditInFocusSlot()));
+    connect(ui->lineEditEllos,SIGNAL(inFocus()),this,SLOT(lineEditInFocusSlot()));
+    connect(ui->lineEditNosotros,SIGNAL(inFocus()),this,SLOT(lineEditInFocusSlot()));
+    connect(ui->lineEditParticiplePast,SIGNAL(inFocus()),this,SLOT(lineEditInFocusSlot()));
+    connect(ui->lineEditParticiplePresent,SIGNAL(inFocus()),this,SLOT(lineEditInFocusSlot()));
+    connect(ui->lineEditSample,SIGNAL(inFocus()),this,SLOT(lineEditInFocusSlot()));
+    connect(ui->lineEditTu,SIGNAL(inFocus()),this,SLOT(lineEditInFocusSlot()));
+    connect(ui->lineEditVerb,SIGNAL(inFocus()),this,SLOT(lineEditInFocusSlot()));
+    connect(ui->lineEditVosotros,SIGNAL(inFocus()),this,SLOT(lineEditInFocusSlot()));
+    connect(ui->lineEditYo,SIGNAL(inFocus()),this,SLOT(lineEditInFocusSlot()));
 }
 
 VerbEditor::~VerbEditor()
@@ -79,4 +104,45 @@ void VerbEditor::on_pushButtonVerbDelete_clicked()
     //Yes, i'm sure
     db->deleteVerb(verbIdent,languageEspanol);
     this->close();
+}
+
+void VerbEditor::on_pushButtonCaps_clicked()
+{
+    //áéíñóúüÁÉÍÑÓÚÜ
+    //флаг знака, да..
+    if(capitalLettersFlag)
+    {
+        capitalLettersFlag=false;
+        ui->pushButtonA->setText("á");
+        ui->pushButtonE->setText("é");
+        ui->pushButtonI->setText("í");
+        ui->pushButtonN->setText("ñ");
+        ui->pushButtonO->setText("ó");
+        ui->pushButtonU1->setText("ú");
+        ui->pushButtonU2->setText("ü");
+    }
+    else
+    {
+        capitalLettersFlag=true;
+        ui->pushButtonA->setText("Á");
+        ui->pushButtonE->setText("É");
+        ui->pushButtonI->setText("Í");
+        ui->pushButtonN->setText("Ñ");
+        ui->pushButtonO->setText("Ó");
+        ui->pushButtonU1->setText("Ú");
+        ui->pushButtonU2->setText("Ü");
+    }
+}
+void VerbEditor::letterClickedSlot()
+{
+    QPushButton *senderButton = qobject_cast<QPushButton*>( sender() );
+    if(senderButton)
+        lineEditInFocus->insert(senderButton->text());
+}
+
+void VerbEditor::lineEditInFocusSlot()
+{
+    QLineEditWithFocus *senderEdit=qobject_cast<QLineEditWithFocus*>(sender());
+    if(senderEdit)
+        lineEditInFocus=senderEdit;
 }

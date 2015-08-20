@@ -62,7 +62,7 @@
     </property>
     <layout class="QGridLayout" name="gridLayout">
      <item row="1" column="2">
-      <widget class="QLineEdit" name="lineEditTu"/>
+      <widget class="QLineEditWithFocus" name="lineEditTu"/>
      </item>
      <item row="2" column="1">
       <widget class="QLabel" name="label_4">
@@ -93,10 +93,10 @@
       </widget>
      </item>
      <item row="1" column="1">
-      <widget class="QLineEdit" name="lineEditYo"/>
+      <widget class="QLineEditWithFocus" name="lineEditYo"/>
      </item>
      <item row="1" column="3">
-      <widget class="QLineEdit" name="lineEditEl"/>
+      <widget class="QLineEditWithFocus" name="lineEditEl"/>
      </item>
      <item row="2" column="2">
       <widget class="QLabel" name="label_5">
@@ -113,13 +113,13 @@
       </widget>
      </item>
      <item row="3" column="1">
-      <widget class="QLineEdit" name="lineEditNosotros"/>
+      <widget class="QLineEditWithFocus" name="lineEditNosotros"/>
      </item>
      <item row="3" column="2">
-      <widget class="QLineEdit" name="lineEditVosotros"/>
+      <widget class="QLineEditWithFocus" name="lineEditVosotros"/>
      </item>
      <item row="3" column="3">
-      <widget class="QLineEdit" name="lineEditEllos"/>
+      <widget class="QLineEditWithFocus" name="lineEditEllos"/>
      </item>
     </layout>
    </widget>
@@ -139,7 +139,7 @@
       <x>140</x>
       <y>160</y>
       <width>281</width>
-      <height>21</height>
+      <height>31</height>
      </rect>
     </property>
     <property name="frameShape">
@@ -151,10 +151,10 @@
     <widget class="QPushButton" name="pushButtonA">
      <property name="geometry">
       <rect>
-       <x>50</x>
+       <x>70</x>
        <y>0</y>
-       <width>21</width>
-       <height>23</height>
+       <width>30</width>
+       <height>30</height>
       </rect>
      </property>
      <property name="text">
@@ -166,8 +166,8 @@
       <rect>
        <x>0</x>
        <y>0</y>
-       <width>41</width>
-       <height>23</height>
+       <width>70</width>
+       <height>30</height>
       </rect>
      </property>
      <property name="text">
@@ -177,14 +177,79 @@
     <widget class="QPushButton" name="pushButtonE">
      <property name="geometry">
       <rect>
-       <x>70</x>
+       <x>100</x>
        <y>0</y>
-       <width>21</width>
-       <height>23</height>
+       <width>30</width>
+       <height>30</height>
       </rect>
      </property>
      <property name="text">
-      <string>PushButton</string>
+      <string>é</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButtonI">
+     <property name="geometry">
+      <rect>
+       <x>130</x>
+       <y>0</y>
+       <width>30</width>
+       <height>30</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>í</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButtonN">
+     <property name="geometry">
+      <rect>
+       <x>160</x>
+       <y>0</y>
+       <width>30</width>
+       <height>30</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>ñ</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButtonO">
+     <property name="geometry">
+      <rect>
+       <x>190</x>
+       <y>0</y>
+       <width>30</width>
+       <height>30</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>ó</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButtonU1">
+     <property name="geometry">
+      <rect>
+       <x>220</x>
+       <y>0</y>
+       <width>30</width>
+       <height>30</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>ú</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButtonU2">
+     <property name="geometry">
+      <rect>
+       <x>250</x>
+       <y>0</y>
+       <width>30</width>
+       <height>30</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>ü</string>
      </property>
     </widget>
    </widget>
@@ -214,7 +279,7 @@
      <string>Present</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="lineEditParticiplePresent">
+   <widget class="QLineEditWithFocus" name="lineEditParticiplePresent">
     <property name="geometry">
      <rect>
       <x>20</x>
@@ -237,7 +302,7 @@
      <string>Past</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="lineEditParticiplePast">
+   <widget class="QLineEditWithFocus" name="lineEditParticiplePast">
     <property name="geometry">
      <rect>
       <x>20</x>
@@ -273,7 +338,7 @@
    <property name="title">
     <string>Verb</string>
    </property>
-   <widget class="QLineEdit" name="lineEditVerb">
+   <widget class="QLineEditWithFocus" name="lineEditVerb">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -345,7 +410,7 @@
      <string>Search</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="lineEditConnectionSearch">
+   <widget class="QLineEditWithFocus" name="lineEditConnectionSearch">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -368,7 +433,7 @@
    <property name="title">
     <string>Samples</string>
    </property>
-   <widget class="QLineEdit" name="lineEditSample">
+   <widget class="QLineEditWithFocus" name="lineEditSample">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -475,6 +540,13 @@
    </widget>
   </widget>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>QLineEditWithFocus</class>
+   <extends>QLineEdit</extends>
+   <header location="global">qlineeditwithfocus.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

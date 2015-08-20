@@ -17,13 +17,15 @@ SOURCES += main.cpp\
     verbs_database.cpp \
     verbeditor.cpp \
     defines.cpp \
-    settingsdialog.cpp
+    settingsdialog.cpp \
+    qlineeditwithfocus.cpp
 
 HEADERS  += mainwindow.h \
     verbs_database.h \
     verbeditor.h \
     defines.h \
-    settingsdialog.h
+    settingsdialog.h \
+    qlineeditwithfocus.h
 
 FORMS    += mainwindow.ui \
     verbeditor.ui \

@@ -40,7 +40,7 @@ private:
     VerbsDatabase db;
     QSqlQueryModel *verbsmodel;
     QClipboard *clipBoard;
-    QMetaObject::Connection clipBoardConnection;
+
 
     void reloadVerbsTable();
 

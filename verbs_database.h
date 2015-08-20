@@ -36,6 +36,8 @@ private:
 signals:
     void sendMessage(QString message, MessageType messtype);
 public slots:
+
+
     
 };
 

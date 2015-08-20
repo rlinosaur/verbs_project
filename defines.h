@@ -38,10 +38,12 @@ enum SpanishTense
     subjPresent=11,
     subjPresentPerfect=12,
     subjImperfect=13,
-    subjPlurperfect=14,
-    subjFuture=15,
-    subjFuturePerfect=16,
-    impAffirmative=17
+    subjImperfect2=14,
+    subjPlurperfect=15,
+    subjPlurperfect2=16,
+    subjFuture=17,
+    subjFuturePerfect=18,
+    impAffirmative=19
 };
 
 QString getTenseName(SpanishTense tense, languageEnum lang);

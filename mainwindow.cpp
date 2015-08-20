@@ -47,7 +47,7 @@ MainWindow::MainWindow(QWidget *parent) :
     //ui->tableViewVerbs->setSelectionModel(QItemSelectionModel::Rows);
 
     clipBoard = QApplication::clipboard();
-    clipBoardConnection=connect(clipBoard,SIGNAL(changed(QClipboard::Mode)),this, SLOT(clipBoardEventSlot(QClipboard::Mode)));
+    connect(clipBoard,SIGNAL(changed(QClipboard::Mode)),this, SLOT(clipBoardEventSlot(QClipboard::Mode)));
 
 
 }
