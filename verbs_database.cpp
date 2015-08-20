@@ -227,6 +227,66 @@ bool VerbsDatabase::changeVerb(QString verbId,QString newName,languageEnum lang)
     q.bindValue(":id",verbId);
     return q.exec();
 }
+
+bool VerbsDatabase::createTensesEs()
+{
+    if(!this->isOpen())return false;
+    QSqlQuery q(db);
+    q.prepare("create table if not exists tenses_es (id integer primary key not null, name text, name_en text,name_ru text;");
+    q.exec();
+    q.prepare("delete from tenses_es;");
+    q.exec();
+
+    this->addTenseEs(0,"Ninguno","None","Нет");
+    this->addTenseEs(1,"Presente","Present","Настоящее");
+    this->addTenseEs(2,"Pretérito perfecto compuesto","Present Perfect","Настоящее совершенное");
+    this->addTenseEs(3,"Pretérito imperfecto","Imperfect","Несовершенное");
+    this->addTenseEs(4,"Pretérito perfecto simple","Preterite","Preterite");
+    this->addTenseEs(5,"Pretérito pluscuamperfecto","Pluperfect","Pluperfect");
+    this->addTenseEs(6,"Futuro","Future","Future");
+    this->addTenseEs(7,"Futuro perfecto","Future Perfect","FuturePerfect");
+    this->addTenseEs(8,"Condicional","Conditional","Условное");
+    this->addTenseEs(9,"Condicional perfecto","Conditional Perfect","Условное совершенное");
+    this->addTenseEs(10,"Pretérito perfecto","Preterite Perfect","PreteritePerfect");
+    this->addTenseEs(11,"Subjuntivo presente","subjPresent","subjPresent");
+    this->addTenseEs(12,"Subjuntivo Pretérito perfecto","subjPresentPerfect","subjPresentPerfect");
+    this->addTenseEs(13,"Subjuntivo Pretérito imperfecto","subjImperfect","subjImperfect");
+    this->addTenseEs(14,"Subjuntivo Pretérito imperfecto 2","subjImperfect2","subjImperfect2");
+    this->addTenseEs(15,"Subjuntivo Pretérito pluscuamperfecto","subjPlurperfect","subjPlurperfect");
+    this->addTenseEs(16,"Subjuntivo Pretérito pluscuamperfecto 2","subjPlurperfect2","subjPlurperfect2");
+    this->addTenseEs(17,"Subjuntivo Futuro","subjFuture","subjFuture");
+    this->addTenseEs(18,"Subjuntivo Futuro perfecto","subjFuturePerfect","subjFuturePerfect");
+    this->addTenseEs(19,"Imperativo","impAffirmative","impAffirmative");
+    this->addTenseEs(20,"Imperativo negativo","impNegative","impAffirmative");
+
+
+
+    this->addTenseEs(101,"Infinitivo presente","Infinitivo presente","Infinitivo presente");
+    this->addTenseEs(102,"Infinitivo compuesto","Infinitivo presente","Infinitivo presente");
+    this->addTenseEs(103,"Gerundio presente","Gerundio presente","Gerundio presente");
+    this->addTenseEs(104,"Gerundio compuesto","Gerundio compuesto","Gerundio compuesto");
+    this->addTenseEs(105,"Participio","Participio","Participio");
+
+
+
+    return true;
+
+}
+
+bool VerbsDatabase::addTenseEs(int id,QString name,QString nameEn,QString nameRu)
+{
+    if(!this->isOpen())return false;
+    QSqlQuery q(db);
+    q.prepare("insert into tenses_es (id, name,name_en, name_ru) values (:id,:name,:name_en,:name_ru);");
+    q.bindValue(":id",id);
+    q.bindValue(":name",name);
+    q.bindValue(":name_en",nameEn);
+    q.bindValue(":name_ru",nameRu);
+    return q.exec();
+
+}
+
+
 /**
  * @brief VerbsDatabase::addVerbEsConnection Add connection for Spanish verb to another language verb
  * @param verbEsId Spanish verb identificator

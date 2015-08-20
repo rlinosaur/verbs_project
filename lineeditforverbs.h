@@ -3,11 +3,12 @@
 
 #include <QLineEdit>
 
-class QLineEditWithFocus : public QLineEdit
+class LineEditForVerbs : public QLineEdit
 {
     Q_OBJECT
 public:
-    explicit QLineEditWithFocus(QWidget *parent = 0);
+    explicit LineEditForVerbs(QWidget *parent = 0);
+    QString dataId;//id of text, yeah
 signals:
   void inFocus();
 protected:

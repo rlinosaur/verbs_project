@@ -62,7 +62,7 @@
     </property>
     <layout class="QGridLayout" name="gridLayout">
      <item row="1" column="2">
-      <widget class="QLineEditWithFocus" name="lineEditTu"/>
+      <widget class="LineEditForVerbs" name="lineEditTu"/>
      </item>
      <item row="2" column="1">
       <widget class="QLabel" name="label_4">
@@ -93,10 +93,10 @@
       </widget>
      </item>
      <item row="1" column="1">
-      <widget class="QLineEditWithFocus" name="lineEditYo"/>
+      <widget class="LineEditForVerbs" name="lineEditYo"/>
      </item>
      <item row="1" column="3">
-      <widget class="QLineEditWithFocus" name="lineEditEl"/>
+      <widget class="LineEditForVerbs" name="lineEditEl"/>
      </item>
      <item row="2" column="2">
       <widget class="QLabel" name="label_5">
@@ -113,13 +113,13 @@
       </widget>
      </item>
      <item row="3" column="1">
-      <widget class="QLineEditWithFocus" name="lineEditNosotros"/>
+      <widget class="LineEditForVerbs" name="lineEditNosotros"/>
      </item>
      <item row="3" column="2">
-      <widget class="QLineEditWithFocus" name="lineEditVosotros"/>
+      <widget class="LineEditForVerbs" name="lineEditVosotros"/>
      </item>
      <item row="3" column="3">
-      <widget class="QLineEditWithFocus" name="lineEditEllos"/>
+      <widget class="LineEditForVerbs" name="lineEditEllos"/>
      </item>
     </layout>
    </widget>
@@ -279,7 +279,7 @@
      <string>Present</string>
     </property>
    </widget>
-   <widget class="QLineEditWithFocus" name="lineEditParticiplePresent">
+   <widget class="LineEditForVerbs" name="lineEditParticiplePresent">
     <property name="geometry">
      <rect>
       <x>20</x>
@@ -302,7 +302,7 @@
      <string>Past</string>
     </property>
    </widget>
-   <widget class="QLineEditWithFocus" name="lineEditParticiplePast">
+   <widget class="LineEditForVerbs" name="lineEditParticiplePast">
     <property name="geometry">
      <rect>
       <x>20</x>
@@ -338,7 +338,7 @@
    <property name="title">
     <string>Verb</string>
    </property>
-   <widget class="QLineEditWithFocus" name="lineEditVerb">
+   <widget class="LineEditForVerbs" name="lineEditVerb">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -410,7 +410,7 @@
      <string>Search</string>
     </property>
    </widget>
-   <widget class="QLineEditWithFocus" name="lineEditConnectionSearch">
+   <widget class="LineEditForVerbs" name="lineEditConnectionSearch">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -433,7 +433,7 @@
    <property name="title">
     <string>Samples</string>
    </property>
-   <widget class="QLineEditWithFocus" name="lineEditSample">
+   <widget class="LineEditForVerbs" name="lineEditSample">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -466,7 +466,7 @@
      </rect>
     </property>
    </widget>
-   <widget class="QLineEdit" name="lineEditSampleTranslationEn">
+   <widget class="LineEditForVerbs" name="lineEditSampleTranslationEn">
     <property name="geometry">
      <rect>
       <x>220</x>
@@ -528,7 +528,7 @@
      <string>Russian Translation</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="lineEditSampleTranslationRu">
+   <widget class="LineEditForVerbs" name="lineEditSampleTranslationRu">
     <property name="geometry">
      <rect>
       <x>220</x>
@@ -542,9 +542,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>QLineEditWithFocus</class>
+   <class>LineEditForVerbs</class>
    <extends>QLineEdit</extends>
-   <header location="global">qlineeditwithfocus.h</header>
+   <header location="global">lineeditforverbs.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

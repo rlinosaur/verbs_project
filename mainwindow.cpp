@@ -24,6 +24,7 @@ MainWindow::MainWindow(QWidget *parent) :
     //QFile::remove(fName);
     db.init(fName);
     db.createTables();
+    db.createTensesEs();
 
     //QSqlQueryModelPrivate
     verbsmodel = new QSqlQueryModel(this);

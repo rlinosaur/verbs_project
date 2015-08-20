@@ -27,6 +27,8 @@ public:
     bool addVerbEsConnection(QString verbEsId, QString verbConnId);
     bool cleanDatabase();
     bool changeVerb(QString verbId, QString newName, languageEnum lang);
+    bool createTensesEs();
+    bool addTenseEs(int id, QString name, QString nameEn, QString nameRu);
 private:
     QSqlDatabase db;
     QString fName;

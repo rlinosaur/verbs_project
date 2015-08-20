@@ -6,6 +6,7 @@
 #include <QLineEdit>
 #include <QDialog>
 
+#include "lineeditforverbs.h"
 #include "verbs_database.h"
 
 namespace Ui {
@@ -38,7 +39,10 @@ private:
     VerbsDatabase *db;
 
     bool capitalLettersFlag;
-    QLineEdit *lineEditInFocus;
+    LineEditForVerbs *lineEditInFocus;
+
+
+    void loadSamples(QString verbformId);
 
 };
 

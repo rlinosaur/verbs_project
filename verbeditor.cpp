@@ -137,12 +137,31 @@ void VerbEditor::letterClickedSlot()
 {
     QPushButton *senderButton = qobject_cast<QPushButton*>( sender() );
     if(senderButton)
+    {
         lineEditInFocus->insert(senderButton->text());
+        lineEditInFocus->setFocus();
+    }
 }
-
+/*
+ *так..что делать-то...
+ *А делать надо следующее...
+ *
+ **/
 void VerbEditor::lineEditInFocusSlot()
 {
-    QLineEditWithFocus *senderEdit=qobject_cast<QLineEditWithFocus*>(sender());
+    LineEditForVerbs *senderEdit=qobject_cast<LineEditForVerbs*>(sender());
     if(senderEdit)
+    {
         lineEditInFocus=senderEdit;
+        loadSamples(lineEditInFocus->dataId);
+    }
+}
+/**
+ * @brief VerbEditor::loadSamples Load samples to editor by verbform id
+ * @param verbformId id of verb form to load
+ */
+void VerbEditor::loadSamples(QString verbformId)
+{
+    if(verbformId.isEmpty())return;
+    ui->lineEditSample->setText("Our id is "+verbformId);
 }
