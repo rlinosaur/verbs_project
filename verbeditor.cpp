@@ -1,10 +1,14 @@
 #include <QMessageBox>
 #include <QSqlRecord>
+#include <QSqlError>
 #include <QSqlQuery>
 #include <QListView>
+#include <QDebug>
 
-#include "verbeditor.h"
 #include "ui_verbeditor.h"
+#include "verbeditor.h"
+#include "verbform.h"
+
 
 VerbEditor::VerbEditor(QString verbId, VerbsDatabase *database, QWidget *parent) :
     QDialog(parent),
@@ -35,13 +39,12 @@ VerbEditor::VerbEditor(QString verbId, VerbsDatabase *database, QWidget *parent)
 */
     verbIdent=verbId;
     QSqlQuery q(db->getDb());
-    q.prepare("select verb from verbs_es where id=:id;");
+    q.prepare("select verb from verbs_es where id=:id limit 1;");
     q.bindValue(":id",verbId);
     q.exec();
     if(q.first())
     {
-        verbVerb=q.record().value("verb").toString();
-  //      ui->labelVerb->setText("Our verb:"+verbVerb);
+        verbVerb=q.record().value("verb").toString();  
         ui->lineEditVerb->setText(verbVerb);
     }
     else
@@ -49,9 +52,6 @@ VerbEditor::VerbEditor(QString verbId, VerbsDatabase *database, QWidget *parent)
         QMessageBox::warning(this,"Warning","Unfortunately information about the verb isn't found, please repeat.");
     }
     this->setWindowTitle("Edit verb '"+verbVerb+"'");
-
-    //Заполнить список.
-    //enum for cicle..how to? Just I don't know.
 
 
     capitalLettersFlag=false;
@@ -78,6 +78,28 @@ VerbEditor::VerbEditor(QString verbId, VerbsDatabase *database, QWidget *parent)
     connect(ui->lineEditVerb,SIGNAL(inFocus()),this,SLOT(lineEditInFocusSlot()));
     connect(ui->lineEditVosotros,SIGNAL(inFocus()),this,SLOT(lineEditInFocusSlot()));
     connect(ui->lineEditYo,SIGNAL(inFocus()),this,SLOT(lineEditInFocusSlot()));
+
+
+    //Initialization of tenses
+    tensesModel = new QSqlQueryModel(this);
+    tensesModel->setQuery("select id,name,name_en,name_ru from tenses_es where id<100 and id>0;",db->getDb());
+    ui->listViewTenses->setModel(tensesModel);
+    ui->listViewTenses->setModelColumn(1);
+    currentTense=TENSE_NINGUNO;
+
+    ui->lineEditYo->pronoun=PRONOUN_YO;
+    ui->lineEditTu->pronoun=PRONOUN_TU;
+    ui->lineEditEl->pronoun=PRONOUN_EL;
+    ui->lineEditNosotros->pronoun=PRONOUN_NOSOTROS;
+    ui->lineEditVosotros->pronoun=PRONOUN_VOSOTROS;
+    ui->lineEditEllos->pronoun=PRONOUN_ELLOS;
+    pronounEditList.append(ui->lineEditYo);
+    pronounEditList.append(ui->lineEditTu);
+    pronounEditList.append(ui->lineEditEl);
+    pronounEditList.append(ui->lineEditNosotros);
+    pronounEditList.append(ui->lineEditVosotros);
+    pronounEditList.append(ui->lineEditEllos);
+
 }
 
 VerbEditor::~VerbEditor()
@@ -164,4 +186,114 @@ void VerbEditor::loadSamples(QString verbformId)
 {
     if(verbformId.isEmpty())return;
     ui->lineEditSample->setText("Our id is "+verbformId);
+}
+
+void VerbEditor::on_listViewTenses_activated(const QModelIndex &index)
+{
+    //Отобразить всё, что нам нужно...пожалуйста.
+    /**
+      1. Узнать идентификатор времени из модели
+      2. Сделать запрос к БД, получить все формы, которые хранятся для этого глагола и для этого времени
+      (храним сразу в структуру, чего беспокоиться-то)...
+      Может даже структуру эту зашьём в редактор...вар..не будем торопиться.
+      3. Раскидать формы по редакторам...как-то так.
+      4. Мысль о хранении объекта в эдиторе (там, где он нужен) вызывает интерес.
+      */
+    on_pushButtonClearEdits_clicked();
+    ui->lineEditYo->dataId.clear();
+    ui->lineEditTu->dataId.clear();
+    ui->lineEditEl->dataId.clear();
+    ui->lineEditNosotros->dataId.clear();
+    ui->lineEditVosotros->dataId.clear();
+    ui->lineEditEllos->dataId.clear();
+    //tensesModel->data(tensesModel->index(index.row(),0)).toStrin;//идентификатор записи о времени в таблице.
+    currentTense=tensesModel->data(tensesModel->index(index.row(),0)).toInt();
+    QSqlQuery q(db->getDb());
+    q.prepare("select id,form,pronoun from verbforms_es where verb_id=:verb_id and tense=:tense;");
+    q.bindValue(":verb_id",verbIdent);
+    q.bindValue(":tense",currentTense);
+    if(!q.exec())
+    {
+        qDebug()<<"DEBUGGIO LAST ERROR "<<db->getDb().lastError();
+        return;
+    }
+    qDebug()<<"Query executed";
+
+    if(!q.first())return;
+    qDebug()<<"There are records in the database";
+
+
+
+
+    qDebug()<<"Clearing edits";
+
+    QSqlRecord r;
+
+    //далее опрос, пока не надоест..ибо так сказано.
+    do
+    {
+       // col1 << r.value("id").toString();
+       // col2 << r.value("name").toString().toUpper();
+        LineEditForVerbs *loadedLineEdit=NULL;
+        r=q.record();
+        switch(r.value("pronoun").toInt())
+        {
+        case PRONOUN_YO:
+            loadedLineEdit=ui->lineEditYo;
+            break;
+        case PRONOUN_TU:
+            loadedLineEdit=ui->lineEditTu;
+            break;
+        case PRONOUN_EL:
+            loadedLineEdit=ui->lineEditEl;
+            break;
+        case PRONOUN_NOSOTROS:
+            loadedLineEdit=ui->lineEditNosotros;
+            break;
+        case PRONOUN_VOSOTROS:
+            loadedLineEdit=ui->lineEditVosotros;
+            break;
+        case PRONOUN_ELLOS:
+            loadedLineEdit=ui->lineEditEllos;
+            break;
+
+        }
+        if(loadedLineEdit!=NULL)
+        {
+            loadedLineEdit->setText(r.value("form").toString());
+            loadedLineEdit->dataId=r.value("id").toString();
+        }
+
+    }while(q.next());
+
+}
+
+void VerbEditor::on_pushButtonClearEdits_clicked()
+{
+    ui->lineEditYo->clear();;
+    ui->lineEditTu->clear();
+    ui->lineEditEl->clear();
+    ui->lineEditNosotros->clear();
+    ui->lineEditVosotros->clear();
+    ui->lineEditEllos->clear();
+}
+
+void VerbEditor::on_pushButtonSaveTense_clicked()
+{
+    qDebug()<<"Currenmt tense:"<<currentTense;
+    if(currentTense==TENSE_NINGUNO) return;
+
+    //далее всё по порядку...му-ха-ха...
+    for(int i=0;i<pronounEditList.size();i++)
+    {
+        if(pronounEditList[i]->dataId.isEmpty())
+        {
+            if(!pronounEditList[i]->text().isEmpty())
+                db->addVerbFormEs(verbIdent,pronounEditList[i]->text(),currentTense,pronounEditList[i]->pronoun);
+        }
+        else
+           db->updateVerbFormEs(pronounEditList[i]->dataId,pronounEditList[i]->text());
+
+    }
+
 }

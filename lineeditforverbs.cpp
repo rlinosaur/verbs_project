@@ -2,7 +2,7 @@
 
 LineEditForVerbs::LineEditForVerbs(QWidget *parent) :
     QLineEdit(parent)
-{
+{    
 }
 void LineEditForVerbs::focusInEvent(QFocusEvent *e)
 {

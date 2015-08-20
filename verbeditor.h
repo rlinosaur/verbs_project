@@ -31,6 +31,12 @@ private slots:
     void letterClickedSlot();
     void lineEditInFocusSlot();
 
+    void on_listViewTenses_activated(const QModelIndex &index);
+
+    void on_pushButtonClearEdits_clicked();
+
+    void on_pushButtonSaveTense_clicked();
+
 private:
     Ui::VerbEditor *ui;
     QSqlTableModel *verbsmodel;
@@ -40,6 +46,12 @@ private:
 
     bool capitalLettersFlag;
     LineEditForVerbs *lineEditInFocus;
+
+    QSqlQueryModel *tensesModel;
+    QSqlQueryModel *samplesModel;
+
+    int currentTense;
+    QList<LineEditForVerbs *> pronounEditList;
 
 
     void loadSamples(QString verbformId);

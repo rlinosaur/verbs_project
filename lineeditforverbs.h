@@ -9,6 +9,7 @@ class LineEditForVerbs : public QLineEdit
 public:
     explicit LineEditForVerbs(QWidget *parent = 0);
     QString dataId;//id of text, yeah
+    int pronoun;
 signals:
   void inFocus();
 protected:

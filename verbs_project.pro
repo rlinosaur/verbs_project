@@ -18,14 +18,16 @@ SOURCES += main.cpp\
     verbeditor.cpp \
     defines.cpp \
     settingsdialog.cpp \
-    lineeditforverbs.cpp
+    lineeditforverbs.cpp \
+    verbform.cpp
 
 HEADERS  += mainwindow.h \
     verbs_database.h \
     verbeditor.h \
     defines.h \
     settingsdialog.h \
-    lineeditforverbs.h
+    lineeditforverbs.h \
+    verbform.h
 
 FORMS    += mainwindow.ui \
     verbeditor.ui \
