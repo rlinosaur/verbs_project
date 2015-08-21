@@ -19,7 +19,8 @@ SOURCES += main.cpp\
     defines.cpp \
     settingsdialog.cpp \
     lineeditforverbs.cpp \
-    verbform.cpp
+    verbform.cpp \
+    verbfunctions.cpp
 
 HEADERS  += mainwindow.h \
     verbs_database.h \
@@ -27,7 +28,8 @@ HEADERS  += mainwindow.h \
     defines.h \
     settingsdialog.h \
     lineeditforverbs.h \
-    verbform.h
+    verbform.h \
+    verbfunctions.h
 
 FORMS    += mainwindow.ui \
     verbeditor.ui \

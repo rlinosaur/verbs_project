@@ -37,6 +37,8 @@ private slots:
 
     void on_pushButtonSaveTense_clicked();
 
+    void on_pushButtonAutoFillTense_clicked();
+
 private:
     Ui::VerbEditor *ui;
     QSqlTableModel *verbsmodel;

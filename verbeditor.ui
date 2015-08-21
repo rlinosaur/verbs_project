@@ -253,6 +253,19 @@
      </property>
     </widget>
    </widget>
+   <widget class="QPushButton" name="pushButtonAutoFillTense">
+    <property name="geometry">
+     <rect>
+      <x>360</x>
+      <y>130</y>
+      <width>75</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Autofill</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QGroupBox" name="groupBox_2">
    <property name="geometry">

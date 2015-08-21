@@ -6,6 +6,8 @@
 #include <QDebug>
 
 #include "ui_verbeditor.h"
+
+#include "verbfunctions.h"
 #include "verbeditor.h"
 #include "verbform.h"
 
@@ -296,4 +298,11 @@ void VerbEditor::on_pushButtonSaveTense_clicked()
 
     }
 
+}
+
+void VerbEditor::on_pushButtonAutoFillTense_clicked()
+{
+    if(currentTense==TENSE_NINGUNO)return;
+    for(int i=0;i<pronounEditList.size();i++)
+        pronounEditList[i]->setText(VerbFunctions::getRegularVerbForm(verbVerb,currentTense,pronounEditList[i]->pronoun));
 }

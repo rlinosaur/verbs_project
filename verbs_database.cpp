@@ -7,6 +7,7 @@
 
 #include "verbs_database.h"
 
+
 /**
  * @brief VerbsDatabase::VerbsDatabase Unexpectable, but it's the class constructor
  * @param parent
@@ -246,9 +247,9 @@ bool VerbsDatabase::createTensesEs()
     this->addTenseEs(TENSE_PRETERITO_PLUSCAMPERFECTO,"Pretérito pluscuamperfecto","Pluperfect","Pluperfect");
     this->addTenseEs(TENSE_FUTURO,"Futuro","Future","Future");
     this->addTenseEs(TENSE_FUTURO_PERFECTO,"Futuro perfecto","Future Perfect","FuturePerfect");
-    this->addTenseEs(TENSE_CONDICIONAL_PERFECTO,"Condicional","Conditional","Условное");
-    this->addTenseEs(TENSE_PRETERITO_PERFECTO,"Condicional perfecto","Conditional Perfect","Условное совершенное");
-    this->addTenseEs(TENSE_PRETERITO_PERFECTO,"Pretérito perfecto","Preterite Perfect","PreteritePerfect");
+    this->addTenseEs(TENSE_CONDICIONAL,"Condicional","Conditional","Условное");
+    this->addTenseEs(TENSE_CONDICIONAL_PERFECTO,"Condicional perfecto","Conditional Perfect","Условное совершенное");
+    this->addTenseEs(TENSE_PRETERITO_ANTERIOR,"Pretérito anterior","Past Perfect","Pretérito anterior");
     this->addTenseEs(TENSE_SUBJUNCTIVO_PRESENTE,"Subjuntivo presente","subjPresent","subjPresent");
     this->addTenseEs(TENSE_SUBJUNCTIVO_PRETERITO_PERFECTO,"Subjuntivo Pretérito perfecto","subjPresentPerfect","subjPresentPerfect");
     this->addTenseEs(TENSE_SUBJUNCTIVO_PRETERITO_IMPERFECTO,"Subjuntivo Pretérito imperfecto","subjImperfect","subjImperfect");
