@@ -228,19 +228,11 @@ void VerbEditor::on_listViewTenses_activated(const QModelIndex &index)
     q.bindValue(":verb_id",verbIdent);
     q.bindValue(":tense",currentTense);
     if(!q.exec())
-    {
-        qDebug()<<"DEBUGGIO LAST ERROR "<<db->getDb().lastError();
+    {       
         return;
     }
-    qDebug()<<"Query executed";
 
     if(!q.first())return;
-    qDebug()<<"There are records in the database";
-
-
-
-
-    qDebug()<<"Clearing edits";
 
     QSqlRecord r;
 
@@ -326,20 +318,13 @@ void VerbEditor::on_pushButtonConnectionAdd_clicked()
     if(!ui->lineEditConnectionAddRussian->text().isEmpty())
     {
         QString vId=db->findVerbId(ui->lineEditConnectionAddRussian->text());
-/*
-        if(db->verbEsConnectionExists(verbIdent,vId))
-        {
-            qDebug()<<"DEBUG IF. Russian connection exists;";
-        }
-*/
+
         if(!vId.isEmpty() && !db->verbEsConnectionExists(verbIdent,vId))
-        {
-            qDebug()<<"Verb exists.Adding connection RUSSIAN";
+        {    
             db->addVerbEsConnection(verbIdent,vId);
         }
         if(vId.isEmpty())
-        {
-             qDebug()<<"connection is clear. Add verb,add connection";
+        {         
             vId=db->addVerb(ui->lineEditConnectionAddRussian->text(),languageRussian);
             if(!vId.isEmpty())db->addVerbEsConnection(verbIdent,vId);
         }
@@ -350,21 +335,13 @@ void VerbEditor::on_pushButtonConnectionAdd_clicked()
     if(!ui->lineEditConnectionAddEnglish->text().isEmpty())
     {
         QString vId=db->findVerbId(ui->lineEditConnectionAddEnglish->text());
-        qDebug()<<"resulitd"<<vId;
-/*
-        if(db->verbEsConnectionExists(verbIdent,vId))
-        {
-            qDebug()<<"DEBUG IF. English connection exists;";
-        }
-        */
+
         if(!vId.isEmpty() && !db->verbEsConnectionExists(verbIdent,vId))
-        {
-            qDebug()<<"Verb exists.Adding connection English";
+        {         
             db->addVerbEsConnection(verbIdent,vId);
         }
         if(vId.isEmpty())
-        {
-            qDebug()<<"connection is clear. Add verb,add connection";
+        {            
             vId=db->addVerb(ui->lineEditConnectionAddEnglish->text(),languageEnglish);
             if(!vId.isEmpty()) db->addVerbEsConnection(verbIdent,vId);
         }
