@@ -114,19 +114,7 @@ void MainWindow::on_pushButton_2_clicked()
     }
     QString verbEsId=db.addVerb(ui->lineEditVerbEs->text(),languageEspanol);
     if(verbEsId.isEmpty())return;
-    if(!ui->lineEditVerbEn->text().isEmpty())
-    {
-        QString verbEnId=db.addVerb(ui->lineEditVerbEn->text(),languageEnglish);
-        if(!verbEnId.isEmpty())
-            db.addVerbEsConnection(verbEsId,verbEnId);
-    }
-    if(!ui->lineEditVerbRu->text().isEmpty())
-    {
-        QString verbRuId=db.addVerb(ui->lineEditVerbRu->text(),languageRussian);
-        if(!verbRuId.isEmpty())
-            db.addVerbEsConnection(verbEsId,verbRuId);
-    }
-    //verbsmodel->select();//по-моему так.
+
      verbsmodel->setQuery("select * from verbs_es;",db.getDb());
     return;
 

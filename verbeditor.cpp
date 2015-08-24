@@ -1,4 +1,5 @@
 #include <QMessageBox>
+#include <QModelIndex>
 #include <QSqlRecord>
 #include <QSqlError>
 #include <QSqlQuery>
@@ -69,13 +70,11 @@ VerbEditor::VerbEditor(QString verbId, VerbsDatabase *database, QWidget *parent)
     connect(ui->pushButtonU1,SIGNAL(clicked()),this,SLOT(letterClickedSlot()));
     connect(ui->pushButtonU2,SIGNAL(clicked()),this,SLOT(letterClickedSlot()));
 
-    connect(ui->lineEditConnectionSearch,SIGNAL(inFocus()),this,SLOT(lineEditInFocusSlot()));
     connect(ui->lineEditEl,SIGNAL(inFocus()),this,SLOT(lineEditInFocusSlot()));
     connect(ui->lineEditEllos,SIGNAL(inFocus()),this,SLOT(lineEditInFocusSlot()));
     connect(ui->lineEditNosotros,SIGNAL(inFocus()),this,SLOT(lineEditInFocusSlot()));
     connect(ui->lineEditParticiplePast,SIGNAL(inFocus()),this,SLOT(lineEditInFocusSlot()));
-    connect(ui->lineEditParticiplePresent,SIGNAL(inFocus()),this,SLOT(lineEditInFocusSlot()));
-    connect(ui->lineEditSample,SIGNAL(inFocus()),this,SLOT(lineEditInFocusSlot()));
+    connect(ui->lineEditParticiplePresent,SIGNAL(inFocus()),this,SLOT(lineEditInFocusSlot()));    
     connect(ui->lineEditTu,SIGNAL(inFocus()),this,SLOT(lineEditInFocusSlot()));
     connect(ui->lineEditVerb,SIGNAL(inFocus()),this,SLOT(lineEditInFocusSlot()));
     connect(ui->lineEditVosotros,SIGNAL(inFocus()),this,SLOT(lineEditInFocusSlot()));
@@ -88,6 +87,16 @@ VerbEditor::VerbEditor(QString verbId, VerbsDatabase *database, QWidget *parent)
     ui->listViewTenses->setModel(tensesModel);
     ui->listViewTenses->setModelColumn(1);
     currentTense=TENSE_NINGUNO;
+
+
+
+    connectionsModel = new QSqlQueryModel(this);
+    reloadConnectionsModel();
+    ui->listViewConnections->setModel(connectionsModel);
+    ui->listViewConnections->setModelColumn(1);
+
+    examplesModel = new QSqlQueryModel(this);
+    ui->listViewSamples->setModel(examplesModel);
 
     ui->lineEditYo->pronoun=PRONOUN_YO;
     ui->lineEditTu->pronoun=PRONOUN_TU;
@@ -187,7 +196,11 @@ void VerbEditor::lineEditInFocusSlot()
 void VerbEditor::loadSamples(QString verbformId)
 {
     if(verbformId.isEmpty())return;
-    ui->lineEditSample->setText("Our id is "+verbformId);
+    currentVerbformId=verbformId;
+    reloadExamplesModel(verbformId);
+
+
+//    ui->lineEditSample->setText("Our id is "+verbformId);
 }
 
 void VerbEditor::on_listViewTenses_activated(const QModelIndex &index)
@@ -305,4 +318,142 @@ void VerbEditor::on_pushButtonAutoFillTense_clicked()
     if(currentTense==TENSE_NINGUNO)return;
     for(int i=0;i<pronounEditList.size();i++)
         pronounEditList[i]->setText(VerbFunctions::getRegularVerbForm(verbVerb,currentTense,pronounEditList[i]->pronoun));
+}
+
+void VerbEditor::on_pushButtonConnectionAdd_clicked()
+{
+    bool reloadTableFlag=false;
+    if(!ui->lineEditConnectionAddRussian->text().isEmpty())
+    {
+        QString vId=db->findVerbId(ui->lineEditConnectionAddRussian->text());
+/*
+        if(db->verbEsConnectionExists(verbIdent,vId))
+        {
+            qDebug()<<"DEBUG IF. Russian connection exists;";
+        }
+*/
+        if(!vId.isEmpty() && !db->verbEsConnectionExists(verbIdent,vId))
+        {
+            qDebug()<<"Verb exists.Adding connection RUSSIAN";
+            db->addVerbEsConnection(verbIdent,vId);
+        }
+        if(vId.isEmpty())
+        {
+             qDebug()<<"connection is clear. Add verb,add connection";
+            vId=db->addVerb(ui->lineEditConnectionAddRussian->text(),languageRussian);
+            if(!vId.isEmpty())db->addVerbEsConnection(verbIdent,vId);
+        }
+        ui->lineEditConnectionAddRussian->clear();
+        reloadTableFlag=true;
+    }
+
+    if(!ui->lineEditConnectionAddEnglish->text().isEmpty())
+    {
+        QString vId=db->findVerbId(ui->lineEditConnectionAddEnglish->text());
+        qDebug()<<"resulitd"<<vId;
+/*
+        if(db->verbEsConnectionExists(verbIdent,vId))
+        {
+            qDebug()<<"DEBUG IF. English connection exists;";
+        }
+        */
+        if(!vId.isEmpty() && !db->verbEsConnectionExists(verbIdent,vId))
+        {
+            qDebug()<<"Verb exists.Adding connection English";
+            db->addVerbEsConnection(verbIdent,vId);
+        }
+        if(vId.isEmpty())
+        {
+            qDebug()<<"connection is clear. Add verb,add connection";
+            vId=db->addVerb(ui->lineEditConnectionAddEnglish->text(),languageEnglish);
+            if(!vId.isEmpty()) db->addVerbEsConnection(verbIdent,vId);
+        }
+        ui->lineEditConnectionAddEnglish->clear();
+        reloadTableFlag=true;
+    }
+
+    if(reloadTableFlag)
+    {
+        reloadConnectionsModel();
+    }
+}
+
+
+void VerbEditor::reloadConnectionsModel()
+{
+    QSqlQuery qu(db->getDb());
+    qu.prepare("select id, verb from verbs_ru where id in (select verb_conn_id from verb_es_connections where verb_es_id=:verb_es_id_zero) union all select id,verb from verbs_en where id in (select verb_conn_id from verb_es_connections where verb_es_id=:verb_es_id);");
+    qu.bindValue(":verb_es_id_zero",verbIdent);
+    qu.bindValue(":verb_es_id",verbIdent);
+    qu.exec();
+    connectionsModel->setQuery(qu);
+
+}
+
+void VerbEditor::reloadExamplesModel(QString verbformId)
+{
+    if(verbformId.isEmpty())return;
+    QSqlQuery qu(db->getDb());
+    qu.prepare("select id, example || '(' || example_ru || ',' || example_en || ')' from examples_es where verbform_id=:verbform_id;");
+    qu.bindValue(":verbform_id",verbformId);
+    qu.exec();
+    examplesModel->setQuery(qu);
+    ui->listViewSamples->setModelColumn(1);
+    ui->lineEditSample->clear();
+    ui->lineEditSampleTranslationEn->clear();
+    ui->lineEditSampleTranslationRu->clear();
+}
+
+void VerbEditor::on_listViewConnections_activated(const QModelIndex &index)
+{
+    //выбрать запись, спросить про удаление. профит.
+    if(QMessageBox::question(this,"Are you sure?","Verb connection for "+connectionsModel->data(connectionsModel->index(index.row(),1)).toString()+" will be deleted. Are you sure about it?",QMessageBox::Yes,QMessageBox::No)!=QMessageBox::Yes) return;
+
+    db->deleteVerbEsConnection(verbIdent,connectionsModel->data(connectionsModel->index(index.row(),0)).toString());
+
+    reloadConnectionsModel();
+
+
+}
+
+void VerbEditor::on_pushButtonAddSample_clicked()
+{
+    //Добавить сэмпл (в некоторых случаях это значит редактировать его, а в некоторых - нет...
+    //Гм..ну давай, чо...
+    //Добавить пример, добавить перевод для него, на двух языках, карл.
+    if(ui->lineEditSample->text().isEmpty())return;
+    QString id=db->addEsExample(lineEditInFocus->dataId,ui->lineEditSample->text());
+    if(id.isEmpty())return;
+    if(!ui->lineEditSampleTranslationEn->text().isEmpty())
+        db->updateEsExampleTranslation(id,ui->lineEditSampleTranslationEn->text(),languageEnglish);
+    if(!ui->lineEditSampleTranslationRu->text().isEmpty())
+        db->updateEsExampleTranslation(id,ui->lineEditSampleTranslationRu->text(),languageRussian);
+
+    reloadExamplesModel(currentVerbformId);
+}
+
+void VerbEditor::on_listViewSamples_activated(const QModelIndex &index)
+{
+    //активировали - молодцы, нао заполнить.
+    QSqlQuery q(db->getDb());
+    q.prepare("select id,example,example_en,example_ru from examples_es where id=:id limit 1;");
+    q.bindValue(":id",examplesModel->data(examplesModel->index(index.row(),0)).toString());
+    if(!q.exec()) return;
+    if(!q.first())return;
+    ui->lineEditSample->setText(q.record().value("example").toString());
+    ui->lineEditSample->dataId=examplesModel->data(examplesModel->index(index.row(),0)).toString();
+    ui->lineEditSampleTranslationEn->setText(q.record().value("example_en").toString());
+    ui->lineEditSampleTranslationRu->setText(q.record().value("example_ru").toString());
+
+
+}
+
+void VerbEditor::on_pushButtonEditSample_clicked()
+{
+    if(ui->lineEditSample->text().isEmpty()) return;
+    if(ui->lineEditSample->dataId.isEmpty()) return;
+        db->updateEsExample(ui->lineEditSample->dataId,ui->lineEditSample->text());    
+    db->updateEsExampleTranslation(ui->lineEditSample->dataId,ui->lineEditSampleTranslationEn->text(),languageEnglish);    
+    db->updateEsExampleTranslation(ui->lineEditSample->dataId,ui->lineEditSampleTranslationRu->text(),languageRussian);
+    reloadExamplesModel(currentVerbformId);
 }

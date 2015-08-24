@@ -33,6 +33,15 @@ public:
     bool addTenseEs(int id, QString name, QString nameEn, QString nameRu);
     QString addVerbFormEs(QString verb_id,QString form,int tense,int pronoun);
     bool updateVerbFormEs(QString id,QString form);//остальное да будет вам известно.
+
+    QString findVerbId(QString verb);
+    bool verbEsConnectionExists(QString verbEsId,QString verbNoEsId);
+    bool deleteVerbEsConnection(QString verbEsId, QString verbConnId);
+
+    QString addEsExample(QString verbFormId, QString example);
+    bool updateEsExampleTranslation(QString exampleId,QString translation,languageEnum lang);
+    bool updateEsExample(QString exampleId,QString exampleNew);
+
 private:
     QSqlDatabase db;
     QString fName;

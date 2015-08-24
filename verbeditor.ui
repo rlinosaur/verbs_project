@@ -268,11 +268,14 @@
    </widget>
   </widget>
   <widget class="QGroupBox" name="groupBox_2">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="geometry">
     <rect>
-     <x>20</x>
-     <y>120</y>
-     <width>191</width>
+     <x>10</x>
+     <y>360</y>
+     <width>201</width>
      <height>201</height>
     </rect>
    </property>
@@ -391,10 +394,10 @@
   <widget class="QGroupBox" name="groupBoxConnections">
    <property name="geometry">
     <rect>
-     <x>20</x>
-     <y>330</y>
-     <width>191</width>
-     <height>221</height>
+     <x>10</x>
+     <y>120</y>
+     <width>201</width>
+     <height>231</height>
     </rect>
    </property>
    <property name="title">
@@ -404,30 +407,66 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>60</y>
-      <width>171</width>
-      <height>141</height>
+      <y>110</y>
+      <width>181</width>
+      <height>111</height>
      </rect>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButtonConnectionSearch">
+   <widget class="QPushButton" name="pushButtonConnectionAdd">
     <property name="geometry">
      <rect>
       <x>130</x>
-      <y>20</y>
-      <width>51</width>
+      <y>40</y>
+      <width>61</width>
       <height>23</height>
      </rect>
     </property>
     <property name="text">
-     <string>Search</string>
+     <string>Add</string>
     </property>
    </widget>
-   <widget class="LineEditForVerbs" name="lineEditConnectionSearch">
+   <widget class="LineEditForVerbs" name="lineEditConnectionAddRussian">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>40</y>
+      <width>113</width>
+      <height>20</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_12">
     <property name="geometry">
      <rect>
       <x>10</x>
       <y>20</y>
+      <width>46</width>
+      <height>13</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Russian</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_13">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>60</y>
+      <width>46</width>
+      <height>13</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>English</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="lineEditConnectionAddEnglish">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>80</y>
       <width>113</width>
       <height>20</height>
      </rect>

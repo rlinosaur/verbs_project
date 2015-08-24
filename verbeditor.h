@@ -21,6 +21,8 @@ public:
     explicit VerbEditor(QString verbId,VerbsDatabase *database,QWidget *parent = 0);
     ~VerbEditor();
     
+
+
 private slots:
     void on_pushButtonVerbChange_clicked();
 
@@ -39,6 +41,16 @@ private slots:
 
     void on_pushButtonAutoFillTense_clicked();
 
+    void on_pushButtonConnectionAdd_clicked();
+
+    void on_listViewConnections_activated(const QModelIndex &index);
+
+    void on_pushButtonAddSample_clicked();
+
+    void on_listViewSamples_activated(const QModelIndex &index);
+
+    void on_pushButtonEditSample_clicked();
+
 private:
     Ui::VerbEditor *ui;
     QSqlTableModel *verbsmodel;
@@ -50,14 +62,18 @@ private:
     LineEditForVerbs *lineEditInFocus;
 
     QSqlQueryModel *tensesModel;
-    QSqlQueryModel *samplesModel;
+    QSqlQueryModel *examplesModel;
+    QSqlQueryModel *connectionsModel;
 
     int currentTense;
     QList<LineEditForVerbs *> pronounEditList;
 
+    QString currentVerbformId;
+
 
     void loadSamples(QString verbformId);
-
+    void reloadConnectionsModel();
+    void reloadExamplesModel(QString verbformId);
 };
 
 #endif // VERBEDITOR_H

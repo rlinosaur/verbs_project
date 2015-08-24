@@ -1,4 +1,5 @@
 #include <QStringList>
+#include <QSqlRecord>
 #include <QSqlQuery>
 #include <QSqlError>
 #include <QDebug>
@@ -94,7 +95,7 @@ bool VerbsDatabase::createTables()
     q.prepare("create table if not exists verbs_es(id varchar(32) primary key not null, verb text);");
     q.exec();
 
-    q.prepare("create table if not exists examples_es (id varchar(32) primary key not null, verbform_id varchar(32), example text, example_ru text, example_en text");    
+    q.prepare("create table if not exists examples_es (id varchar(32) primary key not null, verbform_id varchar(32), example text, example_ru text, example_en text);");
     q.exec();
 
     q.prepare("create table if not exists verbs_en (id varchar(32) primary key not null, verb text);");
@@ -103,7 +104,7 @@ bool VerbsDatabase::createTables()
     q.prepare("create table if not exists verbs_ru (id varchar(32) primary key not null, verb text);");
     q.exec();
     //connections between verbs of different languages.
-    q.prepare("create table if not exists verb_es_connections (id varchar(32) primary key not null,verb_es_id varchar(32), verb_conn_id varchar(32));");
+    q.prepare("create table if not exists verb_es_connections (id varchar(32) primary key not null,verb_es_id varchar(32), verb_conn_id varchar(32),unique (verb_es_is,verb_conn_id));");
     q.exec();
 
     //Нужен ли перевод каждой словоформе? Я думаю, что нет. Тем более, что на английском это почти всегда одно слово.
@@ -314,6 +315,114 @@ bool VerbsDatabase::updateVerbFormEs(QString id, QString form)
     return q.exec();
 }
 
+QString VerbsDatabase::findVerbId(QString verb)
+{
+    if(!this->isOpen())return "";
+    QSqlQuery q(db);
+    q.prepare("select id from verbs_en where verb=:verb1 union select id from verbs_ru where verb=:verb2 union select id from verbs_es where verb=:verb3 limit 1;");
+
+     q.bindValue(":verb1",verb);
+     q.bindValue(":verb2",verb);
+     q.bindValue(":verb3",verb);
+     q.exec();
+     if(q.first())
+     {
+         qDebug()<<"VERB FOUND";
+         return q.record().value("id").toString();
+     }
+
+     return "";
+    q.prepare("select id from verbs_ru where verb=:verb limit 1;");
+    q.bindValue(":verb",verb);
+    q.exec();
+    if(q.first())
+    {
+        qDebug()<<"Found Russian verb "<<q.record().value("id").toString();
+        return q.record().value("id").toString();
+    }
+    q.clear();
+    q.prepare("select id from verbs_en where verb=:verb limit 1;");
+    q.bindValue(":verb",verb);
+    q.exec();
+
+    if(q.first())
+    {
+        qDebug()<<"Found English verb "<<q.record().value("id").toString();
+        return q.record().value("id").toString();
+    }
+
+    return "";
+}
+
+
+bool VerbsDatabase::verbEsConnectionExists(QString verbEsId, QString verbNoEsId)
+{
+    if(!this->isOpen())return false;
+    QSqlQuery q(db);
+    q.prepare("select id,verb_es_id,verb_conn_id from verb_es_connections where verb_es_id=:verb_es_id and verb_conn_id=:verb_conn_id limit 1;");
+    q.bindValue(":verb_es_id",verbEsId);
+    q.bindValue(":verb_conn_id",verbNoEsId);
+    q.exec();
+    if(q.first())
+    {
+       // qDebug()<<"He speaks that connection is found:"<<q.record().value("id").toString()<<","<<q.record().value("verb_es_id").toString()<<"."<<q.record().value("verb_conn_id").toString();
+        return true;
+    }
+    return false;
+}
+
+bool VerbsDatabase::deleteVerbEsConnection(QString verbEsId, QString verbConnId)
+{
+    if(!this->isOpen())return false;
+    QSqlQuery q(db);
+    q.prepare("delete from verb_es_connections where verb_es_id=:verb_es_id and verb_conn_id=:vern_conn_id;");
+    q.bindValue(":verb_es_id",verbEsId);
+    q.bindValue(":verb_conn_id",verbConnId);
+    return q.exec();
+}
+
+QString VerbsDatabase::addEsExample(QString verbFormId, QString example)
+{
+    if(!this->isOpen())return "";
+    QSqlQuery q(db);
+    QString  uuid;
+    uuid=QUuid::createUuid().toRfc4122().toHex();
+    q.prepare("insert into examples_es (id, verbform_id,example) values (:id,:verbform_id,:example);");
+    q.bindValue(":id",uuid);
+    q.bindValue(":verbform_id",verbFormId);
+    q.bindValue(":example",example);
+    if(q.exec())
+        return uuid;
+    return "";
+}
+
+bool VerbsDatabase::updateEsExampleTranslation(QString exampleId, QString translation, languageEnum lang)
+{
+    if(!this->isOpen())return false;
+    QSqlQuery q(db);
+    if(lang==languageEnglish)
+    {
+        q.prepare("update examples_es set example_en=:translation where id=:id;");
+    }
+    else if(lang==languageRussian)
+    {
+        q.prepare("update examples_es set example_ru=:translation where id=:id;");
+    }
+    q.bindValue("translation",translation);
+    q.bindValue(":id",exampleId);
+    return q.exec();
+}
+
+bool VerbsDatabase::updateEsExample(QString exampleId, QString exampleNew)
+{
+    if(!this->isOpen())return false;
+    QSqlQuery q(db);
+    q.prepare("update examples_es set example=:example where id=:id;");
+    q.bindValue("example",exampleNew);
+    q.bindValue(":id",exampleId);
+    return q.exec();
+}
+
 
 /**
  * @brief VerbsDatabase::addVerbEsConnection Add connection for Spanish verb to another language verb
@@ -343,6 +452,9 @@ bool VerbsDatabase::cleanDatabase()
     q.exec("delete from verbforms_es where verb_id not in (select id from verbs_es);");
 //áéíñóúü
 //áéíñóúüÁÉÍÑÓÚÜ
+    /**
+      Что прибавить:
+      1. Английские и русские глаголы, которые ни с кем не связаны (артефакты добавления испанских).
+      */
     return true;
 }
-
