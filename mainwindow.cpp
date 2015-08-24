@@ -24,6 +24,7 @@ MainWindow::MainWindow(QWidget *parent) :
     //QFile::remove(fName);
     db.init(fName);
     db.createTables();
+    db.createIndices();
     db.createTensesEs();
 
     //QSqlQueryModelPrivate
@@ -169,4 +170,55 @@ void MainWindow::on_toolButton_clicked()
 {
     SettingsDialog settings;
     settings.exec();
+}
+
+void MainWindow::on_pushButton_3_clicked()
+{
+    /*
+     * +1. Почистить таблицы.
+     * 2. получить список времён.
+     * 3.сделать цикл на н записей (можно даже цифры, кстати, чего заморачиваться).
+     *4. заполнить вербформы
+     *5. заполнить примеры на двух языках
+     *6. заполнить соединения с иностранными глаголами на двух языках.
+     **/
+    db.clearTable("verb_es");
+    db.clearTable("verb_en");
+    db.clearTable("verb_ru");
+    db.clearTable("examples_es");
+    db.clearTable("verb_es_connections");
+    db.clearTable("verbforms_es");
+
+
+    //времена, родной.
+    int verbNum=1000;
+
+    QString verbId,verbEnId,verbRuId,verbformId;
+    for(int i=0;i<verbNum;i++)
+    {
+        db.transactionStart();
+        verbId=db.addVerb(QString::number(i),languageEspanol);
+        verbEnId=db.addVerb(QString::number(i),languageEnglish);
+        verbRuId=db.addVerb(QString::number(i),languageRussian);
+        db.addVerbEsConnection(verbId,verbEnId);
+        db.addVerbEsConnection(verbId,verbRuId);
+
+        for(int j=1;j<=20;j++)
+        {
+            for(int k=1;k<=6;k++)
+            {
+                verbformId=db.addVerbFormEs(verbId,QString::number(i)+"_"+QString::number(j)+"_"+QString::number(k),j,k);
+                db.addEsExample(verbformId,verbformId);
+                db.updateEsExampleTranslation(verbformId,verbformId,languageEnglish);
+                db.updateEsExampleTranslation(verbformId,verbformId,languageRussian);
+
+
+            }
+        }
+        db.transactionEnd();
+        qDebug()<<"Verb "<<i;
+
+    }
+
+
 }

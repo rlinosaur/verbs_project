@@ -412,10 +412,8 @@ void VerbEditor::on_listViewConnections_activated(const QModelIndex &index)
     db->deleteVerbEsConnection(verbIdent,connectionsModel->data(connectionsModel->index(index.row(),0)).toString());
 
     reloadConnectionsModel();
-
-
 }
-
+//посчитать размер тестовой базы? Ну давайте попробуем, почему нет.
 void VerbEditor::on_pushButtonAddSample_clicked()
 {
     //Добавить сэмпл (в некоторых случаях это значит редактировать его, а в некоторых - нет...

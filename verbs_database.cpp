@@ -115,6 +115,51 @@ bool VerbsDatabase::createTables()
 
     return true;
 }
+
+bool VerbsDatabase::createIndices()
+{
+
+    if(!this->isOpen())return false;
+    QSqlQuery q(db);
+    q.exec("create index verbforms_es_index_verb_id on verbforms_es(verb_id);");
+    q.exec("create index verbforms_es_index_form on verbforms_es(form);");
+    q.exec("create index verbforms_es_index_searchform on verbforms_es(searchform);");
+    q.exec("create index verbforms_es_index_gender on verbforms_es(gender);");
+    q.exec("create index verbforms_es_index_pronoun on verbforms_es(pronoun);");
+    q.exec("create index verbforms_es_index_tense on verbforms_es(tense);");
+
+    q.exec("create index verbs_es_index_verb on verbs_es(verb);");
+    q.exec("create index verbs_en_index_verb on verbs_en(verb);");
+    q.exec("create index verbs_ru_index_verb on verbs_ru(verb);");
+
+    q.exec("create index examples_es_index_verbform_id on verbforms_es(verbform_id);");
+
+    q.exec("create index verb_es_connections_index_verb_es_id on verbforms_es(verb_es_id);");
+    q.exec("create index verb_es_connections_index_verb_conn_id on verbforms_es(verb_conn_id);");
+
+    return true;
+
+}
+
+bool VerbsDatabase::clearTable(QString tableName)
+{
+    if(!this->isOpen())return false;
+     QSqlQuery q(db);
+     q.prepare("delete from "+tableName+";");
+     return q.exec();
+}
+
+bool VerbsDatabase::transactionStart()
+{
+    if(!this->isOpen())return false;
+    return db.transaction();
+}
+
+bool VerbsDatabase::transactionEnd()
+{
+    if(!this->isOpen())return false;
+    return db.commit();
+}
 /**
  * @brief VerbsDatabase::addVerb Add new verb
  * @param verb Verb

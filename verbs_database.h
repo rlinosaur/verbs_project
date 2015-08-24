@@ -22,6 +22,10 @@ public:
     bool close();
     bool deleteDatabase();
     bool createTables();
+    bool createIndices();
+    bool clearTable(QString tableName);
+    bool transactionStart();
+    bool transactionEnd();
     QSqlDatabase getDb(){return db;}
 
     QString addVerb(QString verb,languageEnum lang);
