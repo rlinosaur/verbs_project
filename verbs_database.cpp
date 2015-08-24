@@ -280,8 +280,7 @@ bool VerbsDatabase::createTensesEs()
     if(!this->isOpen())return false;
     QSqlQuery q(db);
     q.prepare("create table if not exists tenses_es (id integer primary key not null, name text, name_en text,name_ru text);");
-    if(!q.exec())
-        qDebug()<<"[WARNING]"<<db.lastError().text();
+    q.exec();
     q.prepare("delete from tenses_es;");
     q.exec();
 
@@ -334,8 +333,7 @@ bool VerbsDatabase::addTenseEs(int id,QString name,QString nameEn,QString nameRu
 
 QString VerbsDatabase::addVerbFormEs(QString verb_id, QString form, int tense, int pronoun)
 {
-    if(!this->isOpen())return "";
-    qDebug()<<"Adding verb form...";
+    if(!this->isOpen())return "";   
     QSqlQuery q(db);
     QString uuid=QUuid::createUuid().toRfc4122().toHex();
 
@@ -352,8 +350,7 @@ QString VerbsDatabase::addVerbFormEs(QString verb_id, QString form, int tense, i
 bool VerbsDatabase::updateVerbFormEs(QString id, QString form)
 {
     if(!this->isOpen())return false;
-    QSqlQuery q(db);
-    qDebug()<<"Updating verb form...";
+    QSqlQuery q(db);   
     q.prepare("update verbforms_es set form=:form where id=:id;");
     q.bindValue(":id",id);
     q.bindValue(":form",form);
@@ -371,12 +368,12 @@ QString VerbsDatabase::findVerbId(QString verb)
      q.bindValue(":verb3",verb);
      q.exec();
      if(q.first())
-     {
-         qDebug()<<"VERB FOUND";
+     {        
          return q.record().value("id").toString();
      }
 
      return "";
+     /*
     q.prepare("select id from verbs_ru where verb=:verb limit 1;");
     q.bindValue(":verb",verb);
     q.exec();
@@ -397,6 +394,7 @@ QString VerbsDatabase::findVerbId(QString verb)
     }
 
     return "";
+    */
 }
 
 
@@ -408,11 +406,7 @@ bool VerbsDatabase::verbEsConnectionExists(QString verbEsId, QString verbNoEsId)
     q.bindValue(":verb_es_id",verbEsId);
     q.bindValue(":verb_conn_id",verbNoEsId);
     q.exec();
-    if(q.first())
-    {
-       // qDebug()<<"He speaks that connection is found:"<<q.record().value("id").toString()<<","<<q.record().value("verb_es_id").toString()<<"."<<q.record().value("verb_conn_id").toString();
-        return true;
-    }
+    if(q.first()) return true;
     return false;
 }
 

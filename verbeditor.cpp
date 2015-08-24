@@ -31,15 +31,7 @@ VerbEditor::VerbEditor(QString verbId, VerbsDatabase *database, QWidget *parent)
         QMessageBox::warning(this,"Warning","Verb isn't selected, please repeat.");
         return;
     }
-/*
-    verbsmodel= new QSqlTableModel(this,db->getDb());
-    verbsmodel->setTable("verbs_es");
-    verbsmodel->setEditStrategy(QSqlTableModel::OnManualSubmit);
-    verbsmodel->select();//Это ещё зачем?
 
-    ui->tableView->setModel(verbsmodel);
-    ui->tableView->hideColumn(0);
-*/
     verbIdent=verbId;
     QSqlQuery q(db->getDb());
     q.prepare("select verb from verbs_es where id=:id limit 1;");
@@ -287,7 +279,7 @@ void VerbEditor::on_pushButtonClearEdits_clicked()
 
 void VerbEditor::on_pushButtonSaveTense_clicked()
 {
-    qDebug()<<"Currenmt tense:"<<currentTense;
+
     if(currentTense==TENSE_NINGUNO) return;
 
     //далее всё по порядку...му-ха-ха...
